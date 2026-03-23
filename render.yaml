@@ -1,0 +1,15 @@
+services:
+  # Admin Dashboard Web Service
+  - type: web
+    name: construction-admin
+    env: static
+    buildCommand: npm run build
+    publishPath: build
+    plan: free
+    envVars:
+      - key: REACT_APP_API_BASE_URL
+        value: https://construction-backend.onrender.com/api
+    routes:
+      - type: rewrite
+        source: /api/(.*)
+        destination: https://construction-backend.onrender.com/api/$1
