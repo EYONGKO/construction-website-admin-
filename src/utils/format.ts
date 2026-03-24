@@ -1,5 +1,51 @@
 import type { AdminProject, AdminService, ContactMessage, QuoteRequest } from '../types/data.ts';
 
+const settingsStorageKey = 'construct-admin-settings';
+const fallbackApiBaseUrl = 'https://construction-website-backend-m3aw.onrender.com/api';
+const fallbackWebsiteUrl = 'https://construction-frontend.onrender.com';
+
+const getWebsiteBaseUrl = () => {
+  if (typeof window === 'undefined') {
+    return fallbackWebsiteUrl;
+  }
+
+  try {
+    const stored = window.localStorage.getItem(settingsStorageKey);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (parsed?.websiteUrl) {
+        return parsed.websiteUrl;
+      }
+
+      if (parsed?.apiBaseUrl) {
+        return String(parsed.apiBaseUrl).replace(/\/api\/?$/, '');
+      }
+    }
+  } catch {
+    return fallbackWebsiteUrl;
+  }
+
+  return fallbackApiBaseUrl.replace(/\/api\/?$/, '');
+};
+
+export const resolveImageUrl = (value?: string | null) => {
+  if (!value) {
+    return '';
+  }
+
+  if (/^(data:|blob:|https?:\/\/)/i.test(value)) {
+    return value;
+  }
+
+  const websiteBaseUrl = getWebsiteBaseUrl();
+
+  try {
+    return new URL(value, websiteBaseUrl.endsWith('/') ? websiteBaseUrl : `${websiteBaseUrl}/`).toString();
+  } catch {
+    return value;
+  }
+};
+
 export const formatDate = (value?: string | null) => {
   if (!value) {
     return 'Not set';
@@ -47,7 +93,7 @@ export const shortenText = (value: string, maxLength = 120) => {
 };
 
 export const getProjectImage = (project: AdminProject) => {
-  return project.images?.find(Boolean) || 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80';
+  return resolveImageUrl(project.images?.find(Boolean)) || 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80';
 };
 
 export const getServiceIconLabel = (service: AdminService) => {
@@ -55,7 +101,7 @@ export const getServiceIconLabel = (service: AdminService) => {
 };
 
 export const getServiceImage = (service: AdminService) => {
-  return service.image || '';
+  return resolveImageUrl(service.image);
 };
 
 export const inferServiceIcon = (title = '') => {

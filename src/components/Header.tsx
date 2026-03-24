@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Layout, Button, Avatar, Dropdown, Space, Typography } from 'antd';
-import { UserOutlined, LogoutOutlined, SettingOutlined, HomeOutlined } from '@ant-design/icons';
+import { UserOutlined, LogoutOutlined, SettingOutlined } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSidebar } from '../contexts/SidebarContext.tsx';
 import Notifications from './Notifications.tsx';
@@ -8,7 +8,6 @@ import type { MenuProps } from 'antd';
 
 const { Header: AntHeader } = Layout;
 const { Text, Title } = Typography;
-const settingsStorageKey = 'construct-admin-settings';
 
 const titles: Record<string, { title: string; subtitle: string }> = {
   '/dashboard': {
@@ -69,21 +68,6 @@ const Header: React.FC = () => {
   }, []);
 
   const current = titles[location.pathname] || titles['/dashboard'];
-  const websiteUrl = useMemo(() => {
-    const fallback = 'http://localhost:3000';
-    const stored = localStorage.getItem(settingsStorageKey);
-
-    if (!stored) {
-      return fallback;
-    }
-
-    try {
-      const parsed = JSON.parse(stored);
-      return parsed.websiteUrl || fallback;
-    } catch {
-      return fallback;
-    }
-  }, []);
 
   const menuItems: MenuProps['items'] = [
     { key: 'profile', icon: <UserOutlined />, label: 'Profile' },
@@ -105,15 +89,7 @@ const Header: React.FC = () => {
         <Text>{current.subtitle}</Text>
       </div>
 
-      <Space size="middle" align="center">
-        <Button
-          type="default"
-          icon={<HomeOutlined />}
-          className="soft-action-button"
-          onClick={() => window.open(websiteUrl, '_blank', 'noopener,noreferrer')}
-        >
-          Open website
-        </Button>
+      <Space size="middle" align="center" className="admin-header-actions">
         <Notifications />
         <Dropdown
           menu={{

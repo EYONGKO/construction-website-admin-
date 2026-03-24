@@ -25,7 +25,7 @@ import {
 import type { RcFile, UploadFile } from 'antd/es/upload/interface';
 import { serviceApi } from '../services/api.ts';
 import type { AdminService } from '../types/data.ts';
-import { getServiceIconLabel, getServiceImage, inferServiceIcon, shortenText } from '../utils/format.ts';
+import { getServiceIconLabel, getServiceImage, inferServiceIcon, resolveImageUrl, shortenText } from '../utils/format.ts';
 import DialogHeading from '../components/DialogHeading.tsx';
 
 const { Search, TextArea } = Input;
@@ -108,7 +108,7 @@ const Services: React.FC = () => {
             uid: `${service.id}-image`,
             name: `${service.title}-image`,
             status: 'done',
-            url: service.image,
+            url: resolveImageUrl(service.image),
           }]
         : []
     );
@@ -197,7 +197,7 @@ const Services: React.FC = () => {
       render: (_: unknown, record: AdminService) => (
         <div className="service-row">
           {record.image ? (
-            <img src={record.image} alt={record.title} className="service-thumb" />
+            <img src={getServiceImage(record)} alt={record.title} className="service-thumb" />
           ) : (
             <div className="service-thumb service-thumb-placeholder">
               <span>{getServiceIconLabel(record).slice(0, 2).toUpperCase()}</span>
@@ -267,6 +267,7 @@ const Services: React.FC = () => {
           columns={columns}
           dataSource={filteredServices}
           loading={loading}
+          scroll={{ x: 820 }}
           pagination={{ pageSize: 8 }}
         />
       </Card>
@@ -313,7 +314,7 @@ const Services: React.FC = () => {
               beforeUpload={() => false}
               onChange={({ fileList }) => setImageFiles(fileList)}
               onPreview={(file) => {
-                const previewSource = file.url || file.thumbUrl;
+                const previewSource = resolveImageUrl(String(file.url || file.thumbUrl || ''));
                 if (previewSource) {
                   window.open(previewSource, '_blank', 'noopener,noreferrer');
                 }

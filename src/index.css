@@ -43,6 +43,12 @@ a {
   transition: margin-left 0.25s ease;
 }
 
+.admin-sidebar-shell {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 1100;
+}
+
 .admin-sidebar {
   position: fixed !important;
   inset: 0 auto 0 0;
@@ -1581,5 +1587,433 @@ a {
 
   .mobile-menu-toggle:hover {
     transform: none;
+  }
+}
+
+/* Final responsive polish */
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body.admin-mobile-menu-open {
+  overflow: hidden;
+  touch-action: none;
+}
+
+.admin-shell,
+.admin-shell-main {
+  min-width: 0;
+}
+
+.admin-shell-main > .ant-layout {
+  min-width: 0;
+}
+
+.admin-header {
+  min-width: 0;
+}
+
+.admin-header-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.admin-header-copy .ant-typography:last-child {
+  max-width: 68ch;
+}
+
+.admin-header-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.admin-content,
+.admin-page,
+.ant-card,
+.ant-card-body {
+  min-width: 0;
+}
+
+.admin-page .ant-card-head {
+  padding: 18px 22px;
+}
+
+.admin-page .ant-card-head-wrapper {
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.admin-page .ant-card-extra {
+  max-width: 100%;
+}
+
+.admin-page .ant-card-extra .ant-space {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.page-toolbar > :first-child {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.page-toolbar > :last-child {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.admin-page .ant-table-wrapper {
+  width: 100%;
+}
+
+.admin-page .ant-table-wrapper .ant-table-container {
+  overflow-x: auto;
+}
+
+.admin-page .ant-table-wrapper .ant-table-cell {
+  vertical-align: top;
+}
+
+.admin-page .ant-pagination {
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+
+.admin-page .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-select,
+.admin-page .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list-item-container {
+  width: 100px;
+  height: 100px;
+}
+
+@media (max-width: 991px) {
+  .sidebar-desktop-toggle {
+    display: none !important;
+  }
+
+  .admin-sidebar-shell {
+    inset: 0 auto 0 0;
+    width: min(86vw, 320px);
+    max-width: 320px;
+    height: 100dvh;
+    z-index: 1200;
+    transform: translateX(calc(-100% - 24px));
+    transition: transform 0.28s ease;
+  }
+
+  .admin-sidebar-shell.mobile-open {
+    transform: translateX(0);
+  }
+
+  .admin-sidebar {
+    position: relative !important;
+    width: min(86vw, 320px) !important;
+    max-width: 320px;
+    height: 100dvh;
+    inset: auto;
+    transform: none;
+    transition: box-shadow 0.28s ease;
+  }
+
+  .admin-sidebar-shell.mobile-open .admin-sidebar {
+    box-shadow: 18px 0 48px rgba(10, 34, 60, 0.3);
+  }
+
+  .admin-shell-main {
+    margin-left: 0 !important;
+  }
+
+  .admin-header {
+    left: 0 !important;
+    right: 0;
+    min-height: 88px;
+    padding: 16px 18px 16px 76px;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .admin-header-copy .ant-typography[h3],
+  .admin-header-copy h3.ant-typography {
+    font-size: 24px;
+    line-height: 1.15;
+  }
+
+  .admin-header-actions {
+    width: 100%;
+    justify-content: space-between;
+    gap: 10px 12px;
+  }
+
+  .admin-header-actions > * {
+    margin-inline-end: 0 !important;
+  }
+
+  .admin-user-chip {
+    max-width: 100%;
+  }
+
+  .admin-content {
+    margin-top: 128px;
+    padding: 18px;
+  }
+
+  .admin-page {
+    gap: 16px;
+  }
+
+  .admin-page .ant-card-head {
+    padding: 16px 18px;
+  }
+
+  .admin-page .ant-card-head-title {
+    white-space: normal;
+  }
+
+  .admin-page .ant-card-extra,
+  .admin-page .ant-card-extra .ant-space {
+    width: 100%;
+  }
+
+  .admin-page .ant-card-extra .ant-space {
+    justify-content: stretch;
+  }
+
+  .admin-page .ant-card-extra .ant-btn {
+    flex: 1 1 140px;
+  }
+
+  .page-toolbar {
+    margin-bottom: 16px;
+  }
+
+  .page-toolbar > :first-child,
+  .page-toolbar > :last-child {
+    flex-basis: 100%;
+  }
+
+  .table-media-cell,
+  .service-row {
+    align-items: flex-start;
+  }
+
+  .admin-drawer-shell .ant-drawer-content-wrapper {
+    width: min(100vw, 560px) !important;
+    max-width: 100vw;
+  }
+
+  .admin-modal-shell .ant-modal,
+  .admin-confirm-modal .ant-modal {
+    width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 24px);
+  }
+
+  .admin-modal-shell .ant-modal-content,
+  .admin-confirm-modal .ant-modal-content {
+    border-radius: 22px;
+  }
+
+  .mobile-menu-overlay {
+    z-index: 1190;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.28s ease, visibility 0.28s ease;
+  }
+
+  .mobile-menu-overlay.active {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .mobile-menu-toggle {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border-radius: 14px;
+    z-index: 1300;
+  }
+}
+
+@media (max-width: 767px) {
+  .admin-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    padding: 12px 12px 12px 64px;
+    gap: 10px;
+  }
+
+  .admin-header-copy .ant-typography[h3],
+  .admin-header-copy h3.ant-typography {
+    font-size: 20px;
+    margin-bottom: 2px;
+  }
+
+  .admin-header-copy .ant-typography:last-child {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .admin-header-actions {
+    width: auto;
+    align-self: start;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .admin-header-actions > .ant-space-item {
+    width: auto;
+  }
+
+  .admin-notification-trigger,
+  .admin-header-actions .admin-user-chip {
+    height: 40px !important;
+    border-radius: 12px !important;
+  }
+
+  .admin-notification-trigger {
+    min-width: 40px;
+    padding-inline: 10px !important;
+  }
+
+  .admin-header-actions .admin-user-chip {
+    width: auto;
+    min-width: 0;
+    max-width: min(152px, calc(100vw - 132px));
+    padding: 6px 10px !important;
+    justify-content: flex-start;
+  }
+
+  .admin-user-chip span {
+    min-width: 0;
+  }
+
+  .admin-user-chip strong,
+  .admin-user-chip small {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .admin-content {
+    margin-top: 144px;
+    padding: 14px;
+  }
+
+  .metric-card .ant-statistic-content {
+    font-size: 28px;
+  }
+
+  .notifications-panel {
+    width: min(100vw - 16px, 360px);
+    max-width: min(100vw - 16px, 360px);
+    border-radius: 18px;
+  }
+
+  .admin-drawer-shell .ant-drawer-content-wrapper {
+    width: 100vw !important;
+  }
+
+  .admin-drawer-shell .ant-drawer-header,
+  .admin-drawer-shell .ant-drawer-body {
+    padding-inline: 16px;
+  }
+}
+
+@media (max-width: 575px) {
+  .admin-sidebar-shell,
+  .admin-sidebar {
+    width: min(92vw, 320px) !important;
+  }
+
+  .mobile-menu-toggle {
+    top: 14px;
+    left: 14px;
+    width: 42px;
+    height: 42px;
+  }
+
+  .admin-header {
+    min-height: 78px;
+    padding: 10px 10px 10px 56px;
+  }
+
+  .admin-header-copy {
+    text-align: left;
+  }
+
+  .admin-kicker {
+    font-size: 9px !important;
+    letter-spacing: 0.06em;
+  }
+
+  .admin-header-copy .ant-typography[h3],
+  .admin-header-copy h3.ant-typography {
+    font-size: 18px;
+  }
+
+  .admin-header-copy .ant-typography:last-child {
+    font-size: 11px;
+  }
+
+  .admin-header-actions {
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .admin-header-actions .admin-user-chip {
+    max-width: min(132px, calc(100vw - 112px));
+    padding: 6px 8px !important;
+  }
+
+  .admin-user-chip small {
+    display: none;
+  }
+
+  .admin-content {
+    margin-top: 136px;
+    padding: 12px;
+  }
+
+  .admin-page .ant-card-head,
+  .admin-page .ant-card-body {
+    padding-inline: 14px;
+  }
+
+  .admin-page .ant-card-extra .ant-btn {
+    flex-basis: 100%;
+  }
+
+  .table-thumb {
+    width: 52px;
+    height: 40px;
+  }
+
+  .service-row {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+
+  .team-profile-hero {
+    padding: 14px;
+  }
+
+  .admin-footer {
+    padding: 14px 12px !important;
+  }
+
+  .admin-modal-shell .ant-modal,
+  .admin-confirm-modal .ant-modal {
+    width: calc(100vw - 12px) !important;
+    max-width: calc(100vw - 12px);
   }
 }

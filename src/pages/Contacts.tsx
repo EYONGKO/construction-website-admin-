@@ -111,6 +111,7 @@ const Contacts: React.FC = () => {
           columns={columns}
           dataSource={filteredContacts}
           loading={loading}
+          scroll={{ x: 760 }}
           pagination={{ pageSize: 10 }}
         />
       </Card>

@@ -111,6 +111,7 @@ const Quotes: React.FC = () => {
           columns={columns}
           dataSource={filteredQuotes}
           loading={loading}
+          scroll={{ x: 820 }}
           pagination={{ pageSize: 10 }}
         />
       </Card>

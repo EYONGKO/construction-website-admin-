@@ -4,6 +4,7 @@ import { ReloadOutlined, SaveOutlined, UploadOutlined } from '@ant-design/icons'
 import type { RcFile, UploadFile } from 'antd/es/upload/interface';
 import { siteContentApi } from '../services/api.ts';
 import type { SiteContent } from '../types/data.ts';
+import { resolveImageUrl } from '../utils/format.ts';
 
 const { TextArea } = Input;
 const { Text } = Typography;
@@ -90,7 +91,7 @@ const buildUploadList = (value?: string, name = 'image'): UploadFile[] =>
         uid: name,
         name,
         status: 'done',
-        url: value,
+        url: resolveImageUrl(value),
       }]
     : [];
 
@@ -182,7 +183,7 @@ const Content: React.FC = () => {
         await handleImageChange(fieldPath, key, fileList);
       }}
       onPreview={(file) => {
-        const source = file.url || file.thumbUrl;
+        const source = resolveImageUrl(String(file.url || file.thumbUrl || ''));
         if (source) {
           window.open(source, '_blank', 'noopener,noreferrer');
         }

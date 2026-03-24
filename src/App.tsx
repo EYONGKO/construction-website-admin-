@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Layout } from 'antd';
 import Sidebar from './components/Sidebar.tsx';
 import Header from './components/Header.tsx';
@@ -20,18 +20,58 @@ import SidebarContext from './contexts/SidebarContext.tsx';
 import type { AdminUser } from './types/data.ts';
 
 const { Content } = Layout;
+const MOBILE_BREAKPOINT = 992;
 
 function App() {
+  const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < MOBILE_BREAKPOINT : false
+  );
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     setIsAuthenticated(Boolean(token));
     setLoading(false);
   }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isMobile && mobileMenuOpen) {
+      setMobileMenuOpen(false);
+    }
+  }, [isMobile, mobileMenuOpen]);
+
+  useEffect(() => {
+    if (isMobile && sidebarCollapsed) {
+      setSidebarCollapsed(false);
+    }
+  }, [isMobile, sidebarCollapsed]);
+
+  useEffect(() => {
+    document.body.classList.toggle('admin-mobile-menu-open', isMobile && mobileMenuOpen);
+
+    return () => {
+      document.body.classList.remove('admin-mobile-menu-open');
+    };
+  }, [isMobile, mobileMenuOpen]);
 
   const login = (token: string, user: AdminUser) => {
     localStorage.setItem('authToken', token);
@@ -52,6 +92,14 @@ function App() {
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
   };
+
+  const shellOffset = useMemo(() => {
+    if (isMobile) {
+      return 0;
+    }
+
+    return sidebarCollapsed ? 92 : 296;
+  }, [isMobile, sidebarCollapsed]);
 
   if (loading) {
     return (
@@ -85,7 +133,6 @@ function App() {
         }}
       >
         <Layout className="admin-shell">
-          {/* Mobile Menu Toggle */}
           <button 
             className="mobile-menu-toggle" 
             onClick={toggleMobileMenu}
@@ -108,22 +155,19 @@ function App() {
             </svg>
           </button>
           
-          {/* Mobile Menu Overlay */}
           <div 
             className={`mobile-menu-overlay ${mobileMenuOpen ? 'active' : ''}`}
             onClick={closeMobileMenu}
           />
           
-          {/* Sidebar */}
-          <div className={`admin-sidebar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+          <div className={`admin-sidebar-shell ${mobileMenuOpen ? 'mobile-open' : ''}`}>
             <Sidebar />
           </div>
           
-          {/* Main Content */}
           <Layout
             className="admin-shell-main"
             style={{
-              marginLeft: sidebarCollapsed ? 92 : 296,
+              marginLeft: shellOffset,
             }}
           >
             <Header />

@@ -100,7 +100,7 @@ const Notifications: React.FC = () => {
   return (
     <Dropdown dropdownRender={() => overlay} trigger={['click']} placement="bottomRight">
       <Badge count={items.length} size="small" color="#c89116">
-        <Button icon={<BellOutlined />} className="soft-action-button" />
+        <Button icon={<BellOutlined />} className="soft-action-button admin-notification-trigger" />
       </Badge>
     </Dropdown>
   );

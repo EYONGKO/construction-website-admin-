@@ -23,7 +23,7 @@ const { Text } = Typography;
 const Sidebar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { collapsed, toggleCollapse } = useSidebar();
+  const { collapsed, toggleCollapse, closeMobile } = useSidebar();
 
   const user = useMemo(() => {
     const stored = localStorage.getItem('user');
@@ -75,7 +75,7 @@ const Sidebar: React.FC = () => {
         <Tooltip title={collapsed ? 'Expand menu' : 'Collapse menu'}>
           <Button
             type="text"
-            className="sidebar-toggle-button"
+            className="sidebar-toggle-button sidebar-desktop-toggle"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={toggleCollapse}
           />
@@ -88,7 +88,10 @@ const Sidebar: React.FC = () => {
           mode="inline"
           selectedKeys={[location.pathname]}
           items={primaryItems}
-          onClick={({ key }) => navigate(key)}
+          onClick={({ key }) => {
+            navigate(key);
+            closeMobile?.();
+          }}
           className="admin-sidebar-menu"
         />
       </div>
@@ -99,7 +102,10 @@ const Sidebar: React.FC = () => {
           mode="inline"
           selectedKeys={[location.pathname]}
           items={secondaryItems}
-          onClick={({ key }) => navigate(key)}
+          onClick={({ key }) => {
+            navigate(key);
+            closeMobile?.();
+          }}
           className="admin-sidebar-menu"
         />
       </div>

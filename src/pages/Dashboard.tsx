@@ -206,6 +206,7 @@ const Dashboard: React.FC = () => {
               dataSource={latestActivity}
               loading={loading}
               pagination={false}
+              scroll={{ x: 720 }}
               locale={{ emptyText: 'No recent contact or quote activity yet.' }}
             />
           </Card>

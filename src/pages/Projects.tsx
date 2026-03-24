@@ -23,7 +23,7 @@ import {
 } from '@ant-design/icons';
 import { projectApi } from '../services/api.ts';
 import type { AdminProject } from '../types/data.ts';
-import { formatDate, getProjectImage, shortenText } from '../utils/format.ts';
+import { formatDate, getProjectImage, resolveImageUrl, shortenText } from '../utils/format.ts';
 import type { RcFile, UploadFile } from 'antd/es/upload/interface';
 import DialogHeading from '../components/DialogHeading.tsx';
 import MobileProjectTable from '../components/MobileTable.tsx';
@@ -132,7 +132,7 @@ const Projects: React.FC = () => {
         uid: `${project.id}-${index}`,
         name: `project-image-${index + 1}`,
         status: 'done',
-        url: image,
+        url: resolveImageUrl(image),
       }))
     );
     setIsModalOpen(true);
@@ -332,6 +332,7 @@ const Projects: React.FC = () => {
             columns={columns}
             dataSource={filteredProjects}
             loading={loading}
+            scroll={{ x: 980 }}
             pagination={{ pageSize: 8 }}
           />
         </div>
@@ -399,7 +400,7 @@ const Projects: React.FC = () => {
               beforeUpload={() => false}
               onChange={({ fileList }) => setImageFiles(fileList)}
               onPreview={(file) => {
-                const previewSource = file.url || file.thumbUrl;
+                const previewSource = resolveImageUrl(String(file.url || file.thumbUrl || ''));
                 if (previewSource) {
                   window.open(previewSource, '_blank', 'noopener,noreferrer');
                 }
@@ -464,7 +465,7 @@ const Projects: React.FC = () => {
                 <Text strong>Project images</Text>
                 <div className="project-image-grid">
                   {selectedProject.images.map((image) => (
-                    <img key={image} src={image} alt={selectedProject.title} className="project-image-grid-item" />
+                    <img key={image} src={resolveImageUrl(image)} alt={selectedProject.title} className="project-image-grid-item" />
                   ))}
                 </div>
               </div>
