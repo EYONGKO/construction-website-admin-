@@ -3,6 +3,9 @@ import { createContext, useContext } from 'react';
 interface SidebarContextType {
   collapsed: boolean;
   toggleCollapse: () => void;
+  mobileOpen?: boolean;
+  toggleMobile?: () => void;
+  closeMobile?: () => void;
 }
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);

@@ -25,6 +25,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -42,6 +43,14 @@ function App() {
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
     setIsAuthenticated(false);
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
   };
 
   if (loading) {
@@ -70,10 +79,47 @@ function App() {
         value={{
           collapsed: sidebarCollapsed,
           toggleCollapse: () => setSidebarCollapsed((current) => !current),
+          mobileOpen: mobileMenuOpen,
+          toggleMobile: toggleMobileMenu,
+          closeMobile: closeMobileMenu,
         }}
       >
         <Layout className="admin-shell">
-          <Sidebar />
+          {/* Mobile Menu Toggle */}
+          <button 
+            className="mobile-menu-toggle" 
+            onClick={toggleMobileMenu}
+            aria-label="Toggle mobile menu"
+            aria-expanded={mobileMenuOpen}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {mobileMenuOpen ? (
+                <g>
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </g>
+              ) : (
+                <g>
+                  <line x1="3" y1="12" x2="21" y2="12"></line>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <line x1="3" y1="18" x2="21" y2="18"></line>
+                </g>
+              )}
+            </svg>
+          </button>
+          
+          {/* Mobile Menu Overlay */}
+          <div 
+            className={`mobile-menu-overlay ${mobileMenuOpen ? 'active' : ''}`}
+            onClick={closeMobileMenu}
+          />
+          
+          {/* Sidebar */}
+          <div className={`admin-sidebar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+            <Sidebar />
+          </div>
+          
+          {/* Main Content */}
           <Layout
             className="admin-shell-main"
             style={{

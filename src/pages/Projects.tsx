@@ -26,6 +26,7 @@ import type { AdminProject } from '../types/data.ts';
 import { formatDate, getProjectImage, shortenText } from '../utils/format.ts';
 import type { RcFile, UploadFile } from 'antd/es/upload/interface';
 import DialogHeading from '../components/DialogHeading.tsx';
+import MobileProjectTable from '../components/MobileTable.tsx';
 import { productCatalog } from '../data/productCatalog.ts';
 
 const { Search, TextArea } = Input;
@@ -325,12 +326,21 @@ const Projects: React.FC = () => {
           </Text>
         </div>
 
-        <Table
-          rowKey="id"
-          columns={columns}
-          dataSource={filteredProjects}
-          loading={loading}
-          pagination={{ pageSize: 8 }}
+        <div className="desktop-table-view">
+          <Table
+            rowKey="id"
+            columns={columns}
+            dataSource={filteredProjects}
+            loading={loading}
+            pagination={{ pageSize: 8 }}
+          />
+        </div>
+
+        <MobileProjectTable
+          data={filteredProjects}
+          onView={setSelectedProject}
+          onEdit={openEditModal}
+          onDelete={handleDelete}
         />
       </Card>
 
