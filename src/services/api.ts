@@ -27,7 +27,7 @@ const getApiBaseUrl = () => {
     console.error('Unable to read admin settings for API base URL.', error);
   }
 
-  return 'http://localhost:8080/api';
+  return 'https://construction-website-backend-m3aw.onrender.com/api';
 };
 
 const api = axios.create({
