@@ -12,6 +12,7 @@ const settingsStorageKey = 'construct-admin-settings';
 const getApiBaseUrl = () => {
   const envBaseUrl = process.env.REACT_APP_API_BASE_URL;
   if (envBaseUrl) {
+    console.log('Using environment variable API URL:', envBaseUrl);
     return envBaseUrl;
   }
 
@@ -20,6 +21,7 @@ const getApiBaseUrl = () => {
     if (stored) {
       const parsed = JSON.parse(stored);
       if (parsed?.apiBaseUrl) {
+        console.log('Using localStorage API URL:', parsed.apiBaseUrl);
         return parsed.apiBaseUrl;
       }
     }
@@ -27,7 +29,9 @@ const getApiBaseUrl = () => {
     console.error('Unable to read admin settings for API base URL.', error);
   }
 
-  return 'https://construction-website-backend-m3aw.onrender.com/api';
+  const fallbackUrl = 'https://construction-website-backend-m3aw.onrender.com/api';
+  console.log('Using fallback API URL:', fallbackUrl);
+  return fallbackUrl;
 };
 
 const api = axios.create({
@@ -36,10 +40,25 @@ const api = axios.create({
   },
 });
 
-api.interceptors.request.use((config) => ({
-  ...config,
-  baseURL: getApiBaseUrl(),
-}));
+api.interceptors.request.use((config) => {
+  const fullUrl = getApiBaseUrl() + (config.url || '');
+  console.log('Making API request:', fullUrl);
+  return {
+    ...config,
+    baseURL: getApiBaseUrl(),
+  };
+});
+
+api.interceptors.response.use(
+  (response) => {
+    console.log('API response success:', response.config.url, response.status);
+    return response;
+  },
+  (error) => {
+    console.log('API response error:', error.config?.url, error.response?.status, error.message);
+    return Promise.reject(error);
+  }
+);
 
 export const projectApi = {
   getAll: async (): Promise<AdminProject[]> => {
