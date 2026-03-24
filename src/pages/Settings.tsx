@@ -22,7 +22,7 @@ const Settings: React.FC = () => {
     if (!stored) {
       form.setFieldsValue({
         websiteUrl: 'http://localhost:3000',
-        apiBaseUrl: '/api',
+        apiBaseUrl: 'https://construction-website-backend-m3aw.onrender.com/api',
         defaultResponseOwner: 'Sales Desk',
         compactTables: false,
         openFrontendInNewTab: true,
